@@ -1,0 +1,41 @@
+#
+# This action is run upon a release taggig.
+#
+ 
+name: "Create Relase for dev"
+# Controls when the action will run.
+on:
+  workflow_dispatch:
+  release:
+    types: [created]
+ 
+# call the ci-cd workflow 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: release
+        run: |
+          echo "Release created: ${{ github.event.release.tag_name }}"    
+      - name: dispatch
+        id: dispatch
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.BOT_USER_TOKEN }}
+          script: |
+            try {
+              const result = await github.rest.actions.createWorkflowDispatch({
+                owner: 'Narsing-s',
+                repo: 'bank-customer-check-balance',
+                workflow_id: 'create-release.yml',
+                ref: 'main',
+                inputs :{"ref":"${{ github.event.release.tag_name }}","repoName":"${{ github.repository_owner}}/${{ github.event.repository.name }}"},
+              })
+              console.log(result);
+            } catch(error) {
+              console.error(error);
+              core.setFailed(error);
+            }
+      - name: build
+        run: |
+          echo "Release triggered.Please check corresponding ci-cd repo for build status"
