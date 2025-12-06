@@ -1,89 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Bank Balance Check Portal</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background:#f3f6fc;
-      text-align: center;
-      padding: 40px;
-    }
-    .box {
-      width: 400px;
-      margin: auto;
-      background: white;
-      padding: 25px;
-      border-radius:10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input {
-      width: 90%;
-      padding: 12px;
-      margin-top: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      margin-top: 15px;
-      padding: 12px 25px;
-      font-size: 16px;
-      border: none;
-      background:#007bff;
-      color: white;
-      cursor: pointer;
-      border-radius: 6px;
-    }
-    button:hover { background:#005fcc; }
-    .result {
-      margin-top: 20px;
-      background: #e8f5ff;
-      padding: 15px;
-      border-radius:8px;
-      font-size: 18px;
-      display: none;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <title>Bank-Cutomer-Check-Balance</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
- 
-<h2>🏦 Bank Customer Balance Check</h2>
-<div class="box">
-  <input type="text" id="accNo" placeholder="Enter Account Number" />
-  <button onclick="checkBalance()">Check Balance</button>
-  
-  <div class="result" id="output"></div>
-</div>
- 
-<script>
-  const API_URL = "https://<your-app-name>.cloudhub.io/api/v1/accounts";  // Update with your Mule URL
- 
-  async function checkBalance() {
-    let acc = document.getElementById("accNo").value;
-    if(acc.length !== 10){
-      alert("Account number must be 10 digits.");
-      return;
-    }
- 
-    try {
-      const res = await fetch(`${API_URL}/${acc}/balance`);
-      const data = await res.json();
- 
-      document.getElementById("output").style.display = "block";
-      document.getElementById("output").innerHTML = `
-         <strong>Account:</strong> ${data.accountNumber} <br>
-         <strong>Holder:</strong> ${data.accountHolderName} <br>
-         <strong>Type:</strong> ${data.accountType} <br>
-         <strong>Balance:</strong> ₹${data.availableBalance}
-      `;
-    }
-    catch(error){
-      alert("Error fetching balance!");
-    }
-  }
-</script>
- 
+  <div class="header">
+    <h1>Bank App</h1>
+  </div>
+
+  <div class="container" id="menuPage">
+    <h2>Choose Operation</h2>
+
+    <div class="menu">
+      <button onclick="showPage('createPage')">Create Account</button>
+      <button onclick="showPage('updatePage')">Update Account</button>
+      <button onclick="showPage('deletePage')">Delete Account</button>
+      <button onclick="showPage('balancePage')">Check Balance</button>
+      <button onclick="showPage('depositPage')">Deposit</button>
+      <button onclick="showPage('withdrawPage')">Withdraw</button>
+      <button onclick="showPage('historyPage')">Transaction History</button>
+    </div>
+  </div>
+
+  <!-- CREATE ACCOUNT -->
+  <div class="container" id="createPage" style="display:none;">
+    <h2>Create Account</h2>
+    <input id="cFullName" placeholder="Full Name" />
+    <input id="cEmail" placeholder="Email" />
+    <input id="cDob" placeholder="Date of Birth (YYYY-MM-DD)" />
+    <input id="cMobile" placeholder="Mobile Number" />
+    <input id="cAddress" placeholder="Address" />
+    <input id="cAdhar" placeholder="Aadhar Number" />
+    <input id="cBank" placeholder="Bank Name" />
+    <button onclick="createAccount()">Create</button>
+    <pre id="createResult"></pre>
+  </div>
+
+  <!-- UPDATE -->
+  <div class="container" id="updatePage" style="display:none;">
+    <h2>Update Account</h2>
+    <input id="uAccount" placeholder="Account Number" />
+    <input id="uFullName" placeholder="Full Name" />
+    <input id="uAddress" placeholder="Address" />
+    <input id="uMobile" placeholder="Mobile Number" />
+    <button onclick="updateAccount()">Update</button>
+    <pre id="updateResult"></pre>
+  </div>
+
+  <!-- DELETE -->
+  <div class="container" id="deletePage" style="display:none;">
+    <h2>Delete Account</h2>
+    <input id="dAccount" placeholder="Account Number" />
+    <button onclick="deleteAccount()">Delete</button>
+    <pre id="deleteResult"></pre>
+  </div>
+
+  <!-- CHECK BALANCE -->
+  <div class="container" id="balancePage" style="display:none;">
+    <h2>Check Balance</h2>
+    <input id="bAccount" placeholder="Account Number" />
+    <input id="bPin" placeholder="ATM PIN" />
+    <input id="bBank" placeholder="Bank" />
+    <input id="bType" placeholder="Account Type" />
+    <button onclick="checkBalance()">Check</button>
+    <pre id="balanceResult"></pre>
+  </div>
+
+  <!-- DEPOSIT -->
+  <div class="container" id="depositPage" style="display:none;">
+    <h2>Deposit Amount</h2>
+    <input id="depAccount" placeholder="Account Number" />
+    <input id="depAmount" placeholder="Amount" />
+    <button onclick="deposit()">Deposit</button>
+    <pre id="depositResult"></pre>
+  </div>
+
+  <!-- WITHDRAW -->
+  <div class="container" id="withdrawPage" style="display:none;">
+    <h2>Withdraw Amount</h2>
+    <input id="wAccount" placeholder="Account Number" />
+    <input id="wPin" placeholder="ATM PIN" />
+    <input id="wAmount" placeholder="Amount" />
+    <button onclick="withdraw()">Withdraw</button>
+    <pre id="withdrawResult"></pre>
+  </div>
+
+  <!-- TRANSACTION HISTORY -->
+  <div class="container" id="historyPage" style="display:none;">
+    <h2>Transaction History</h2>
+    <input id="hAccount" placeholder="Account Number" />
+    <button onclick="history()">Get History</button>
+    <pre id="historyResult"></pre>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
- 
